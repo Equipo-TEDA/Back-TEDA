@@ -1,3 +1,3 @@
 # Ignorar archivos de configuración locales
-entorno/
+venv/
 config.json
