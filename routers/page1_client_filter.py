@@ -306,3 +306,257 @@ async def hibernating_searchs_current_year_client_filter(db: Session = Depends(g
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 #----------------------------------------------------------------
+#Cantidad de vacantes, en búsquedas GANADAS
+
+@router_1_client_filter.get("/earned_search_vacancies_current_year_client_filter")
+async def earned_search_vacancies_current_year_client_filter(db: Session = Depends(get_db)):
+    try:
+        query = text(
+                """
+                SELECT 
+                    c.name "cliente", 
+                    sum(s.total_vacancies) "cantidad_vacantes_ganadas"
+                FROM search AS s
+                INNER JOIN client AS c ON s.client_id = c.id
+                WHERE year(s.date_opening) = YEAR(curdate()) AND s.id <> 22 AND s.status_search_id = 3
+                GROUP BY cliente;
+                """
+        )
+
+        result = db.execute(query)
+        count = result.fetchall()
+
+        results = []
+        for row in count:
+            results.append({
+                "cliente":row[0],
+                "cantidad_vacantes_ganadas": row[1]
+            })
+
+        return {"count": results}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+#----------------------------------------------------------------
+#Cantidad de vacantes, en búsquedas CERRADAS
+
+@router_1_client_filter.get("/closed_search_vacancies_current_year_client_filter")
+async def closed_search_vacancies_current_year_client_filter(db: Session = Depends(get_db)):
+    try:
+        query = text(
+                """
+                SELECT 
+                    c.name "cliente", 
+                    sum(s.total_vacancies) "cantidad_vacantes_cerradas"
+                FROM search AS s
+                INNER JOIN client AS c ON s.client_id = c.id
+                WHERE year(s.date_opening) = YEAR(curdate()) AND s.id <> 22 AND s.status_search_id = 2
+                GROUP BY cliente
+                ;
+                """
+        )
+
+        result = db.execute(query)
+        count = result.fetchall()
+
+        results = []
+        for row in count:
+            results.append({
+                "cliente":row[0],
+                "cantidad_vacantes_cerradas": row[1]
+            })
+
+        return {"count": results}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+#----------------------------------------------------------------
+# Cantidad de vacantes, en búsquedas TRABAJANDO
+
+@router_1_client_filter.get("/working_search_vacancies_current_year_client_filter")
+async def working_search_vacancies_current_year_client_filter(db: Session = Depends(get_db)):
+    try:
+        query = text(
+                """
+                SELECT 
+                    c.name "cliente", 
+                    sum(s.total_vacancies) "cantidad_vacantes_trabajando"
+                FROM search AS s
+                INNER JOIN client AS c ON s.client_id = c.id
+                WHERE year(s.date_opening) = YEAR(curdate()) AND s.id <> 22 AND s.status_search_id IN (1, 5, 4)
+                GROUP BY cliente;
+                """
+        )
+
+        result = db.execute(query)
+        count = result.fetchall()
+
+        results = []
+        for row in count:
+            results.append({
+                "cliente":row[0],
+                "cantidad_vacantes_trabajando": row[1]
+            })
+
+        return {"count": results}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+#--------------------------------------------------------------------
+# Cantidad de vacantes, en búsquedas ABIERTAS
+
+@router_1_client_filter.get("/open_search_vacancies_current_year_client_filter")
+async def open_search_vacancies_current_year_client_filter(db: Session = Depends(get_db)):
+    try:
+        query = text(
+                """
+                SELECT 
+                    c.name "cliente", 
+                    sum(s.total_vacancies) "cantidad_vacantes_abiertas"
+                FROM search AS s
+                INNER JOIN client AS c ON s.client_id = c.id
+                WHERE year(s.date_opening) = YEAR(curdate()) AND s.id <> 22 AND s.status_search_id = 1
+                GROUP BY cliente;
+                """
+        )
+
+        result = db.execute(query)
+        count = result.fetchall()
+
+        results = []
+        for row in count:
+            results.append({
+                "cliente":row[0],
+                "cantidad_vacantes_abiertas": row[1]
+            })
+
+        return {"count": results}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+#--------------------------------------------------------------------
+# Cantidad de vacantes, en búsquedas Stand-By
+
+@router_1_client_filter.get("/standby_search_vacancies_current_year_client_filter")
+async def standby_search_vacancies_current_year_client_filter(db: Session = Depends(get_db)):
+    try:
+        query = text(
+                """
+                SELECT 
+                    c.name "cliente", 
+                    sum(s.total_vacancies) "cantidad_vacantes_stand_by"
+                FROM search as s
+                INNER JOIN client AS c ON s.client_id = c.id
+                WHERE year(s.date_opening) = YEAR(curdate()) AND s.id <> 22 AND s.status_search_id = 5
+                GROUP BY cliente;
+                """
+        )
+
+        result = db.execute(query)
+        count = result.fetchall()
+
+        results = []
+        for row in count:
+            results.append({
+                "cliente":row[0],
+                "cantidad_vacantes_stand_by": row[1]
+            })
+
+        return {"count": results}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+#--------------------------------------------------------------------
+# Cantidad de vacantes, en búsquedas HIBERNANDO
+
+@router_1_client_filter.get("/hibernating_search_vacancies_current_year_client_filter")
+async def hibernating_search_vacancies_current_year_client_filter(db: Session = Depends(get_db)):
+    try:
+        query = text(
+                """
+                SELECT 
+                    c.name "cliente", 
+                    sum(s.total_vacancies) "cantidad_vacantes_hibernando"
+                FROM search AS s
+                INNER JOIN client AS c ON s.client_id = c.id
+                WHERE year(s.date_opening) = YEAR(CURDATE()) AND s.id <> 22 AND s.status_search_id = 4
+                GROUP BY cliente
+                ;
+                """
+        )
+
+        result = db.execute(query)
+        count = result.fetchall()
+
+        results = []
+        for row in count:
+            results.append({
+                "cliente":row[0],
+                "cantidad_vacantes_hibernando": row[1]
+            })
+
+        return {"count": results}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+#--------------------------------------------------------------------
+# Cantidad de búsquedas GANADAS POR MES
+
+@router_1_client_filter.get("/earned_searchs_per_month_client_filter")
+async def earned_searchs_per_month_client_filter(db: Session = Depends(get_db)):
+    try:
+        query = text(
+                """
+                SELECT 
+                    c.name "cliente", 
+                    month(s.date_opening) "mes", 
+                    SUM(s.vacancies) "cantidad_vacantes_cubiertas"
+                FROM search AS s
+                INNER JOIN client AS c ON s.client_id = c.id
+                WHERE YEAR(s.date_opening) = YEAR(curdate()) AND s.id <> 22 AND s.status_search_id = 3
+                GROUP BY 1, 2;
+                """
+        )
+
+        result = db.execute(query)
+        count = result.fetchall()
+
+        results = []
+        for row in count:
+            results.append({
+                "cliente":row[0],
+                "mes": row[1],
+                "cantidad_vacantes_cubiertas": row[2]
+            })
+
+        return {"count": results}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+#--------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
