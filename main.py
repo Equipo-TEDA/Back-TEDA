@@ -7,6 +7,7 @@ app = FastAPI()
 app.include_router(router_1)
 app.include_router(router_1_client_filter)
 
+
 @app.get("/")
 async def root():
-    return {"message": "Hello Mundo"}
+    return {"message": "Hello World"}
