@@ -13,6 +13,28 @@ def get_db():
     finally:
         db.close()
 
+#Eficacia de búsquedas
+@router_1.get("/search_efficiency")
+async def search_efficiency(db: Session = Depends(get_db)):
+    try:
+        query = text("""
+                    SELECT
+                        ROUND(((SELECT COUNT(*) "cantidad_busquedas_ganadas"
+                                FROM search
+                                WHERE year(date_opening) = YEAR(curdate()) AND status_search_id = 3 AND id <> 22)
+                    /
+                        (SELECT COUNT(*) "cantidad_busquedas_ganadas_+_cerradas"
+                            FROM search
+                            WHERE year(date_opening) = YEAR(curdate()) AND status_search_id IN (2,3) AND id <> 22))*100, 0) "eficacia_de_busqueda_2024"
+                    ;
+                    """)
+        result = db.execute(query)
+        efficiency = result.scalar()
+
+        return {"efficiency": efficiency}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 #Cantidad de busquedas totales en el año corriente
 @router_1.get("/search_current_year")
 async def search_current_year(db: Session = Depends(get_db)):
