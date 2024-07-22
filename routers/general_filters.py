@@ -12,3 +12,5 @@ def get_db():
         yield db
     finally:
         db.close()
+
+#Acá se van a cargar los filtros "generales" para colocar en los botones de cada filtro
