@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
 # Cargar configuración desde config.json
-with open('config\config.json') as config_file:
+with open('config/config.json') as config_file:
     config = json.load(config_file)
 
 # Variables de configuración
