@@ -54,6 +54,7 @@ async def search_current_year(db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
 #----------------------------------------------------------------------    
 #Cantidad de vacantes totales en el año corriente
 @router_1.get("/vacancies_current_year")
@@ -70,7 +71,7 @@ async def vacancies_current_year(db: Session = Depends(get_db)):
         return {"count": count}
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) 
 
 #----------------------------------------------------------------------    
 #Cantidad de busquedas ganadas en el año corriente
@@ -91,6 +92,7 @@ async def earned_searchs_current_year(db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=str(e))
 
 #----------------------------------------------------------------------    
+
 #Cantidad de busquedas cerradas en el año corriente
 @router_1.get("/closed_searchs_current_year")
 async def closed_searchs_current_year(db: Session = Depends(get_db)):
@@ -108,7 +110,9 @@ async def closed_searchs_current_year(db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
+
 #----------------------------------------------------------------------
+
 # Cantidad de búsquedas TRABAJANDO(Abiertas (1) + Stand-by (5) + Hibernando (4))(tarjeta)
 @router_1.get("/working_searchs_current_year")
 async def working_searchs_current_year(db: Session = Depends(get_db)):
@@ -143,6 +147,7 @@ async def open_searchs_current_year(db: Session = Depends(get_db)):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 #----------------------------------------------------------------------    
 # Cantidad de búsquedas stand-by del 2024
@@ -198,6 +203,7 @@ async def earned_search_vacancies(db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
 #----------------------------------------------------------------------    
 # Cantidad de vacantes, en búsquedas CERRADAS
 @router_1.get("/closed_search_vacancies")
@@ -215,6 +221,7 @@ async def closed_search_vacancies(db: Session = Depends(get_db)):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 #----------------------------------------------------------------------    
 # Cantidad de vacantes, en búsquedas TRABAJANDO(Abiertas + Stand-By + Hibernando)
@@ -234,6 +241,7 @@ async def working_search_vacancies(db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
 #----------------------------------------------------------------------    
 # Cantidad de vacantes, en búsquedas ABIERTAS
 @router_1.get("/open_search_vacancies")
@@ -251,6 +259,7 @@ async def open_search_vacancies(db: Session = Depends(get_db)):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 #----------------------------------------------------------------------    
 # Cantidad de vacantes, en búsquedas Stand-By
@@ -270,6 +279,7 @@ async def stand_search_vacancies(db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
 #----------------------------------------------------------------------    
 # Cantidad de vacantes, en búsquedas HIBERNANDO
 @router_1.get("/hibernating_search_vacancies")
@@ -287,6 +297,7 @@ async def hibernating_search_vacancies(db: Session = Depends(get_db)):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 #----------------------------------------------------------------------    
 # Cantidad de búsquedas GANADAS POR MES
@@ -311,6 +322,10 @@ async def earned_searchs_per_month(db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
+
+# Tabla (join entre search -> client (para el nombre de cliente),
+#				search -> status_search (para el nombre del estado)
+
 #----------------------------------------------------------------------
 # Tabla 
 @router_1.get("/table_client_status_search")
