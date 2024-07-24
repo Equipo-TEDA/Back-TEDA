@@ -1,2 +1,5 @@
-prueba/
+# Ignorar archivos de configuración locales
+venv/
 config.json
+entorno/
+
