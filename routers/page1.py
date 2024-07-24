@@ -13,6 +13,7 @@ def get_db():
     finally:
         db.close()
 
+#----------------------------------------------------------------------
 #Eficacia de búsquedas
 @router_1.get("/search_efficiency")
 async def search_efficiency(db: Session = Depends(get_db)):
@@ -35,6 +36,7 @@ async def search_efficiency(db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+#----------------------------------------------------------------------
 #Cantidad de busquedas totales en el año corriente
 @router_1.get("/search_current_year")
 async def search_current_year(db: Session = Depends(get_db)):
@@ -51,7 +53,8 @@ async def search_current_year(db: Session = Depends(get_db)):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
+
+#----------------------------------------------------------------------    
 #Cantidad de vacantes totales en el año corriente
 @router_1.get("/vacancies_current_year")
 async def vacancies_current_year(db: Session = Depends(get_db)):
@@ -68,7 +71,8 @@ async def vacancies_current_year(db: Session = Depends(get_db)):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
+
+#----------------------------------------------------------------------    
 #Cantidad de busquedas ganadas en el año corriente
 @router_1.get("/earned_searchs_current_year")
 async def earned_searchs_current_year(db: Session = Depends(get_db)):
@@ -85,7 +89,8 @@ async def earned_searchs_current_year(db: Session = Depends(get_db)):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
+
+#----------------------------------------------------------------------    
 #Cantidad de busquedas cerradas en el año corriente
 @router_1.get("/closed_searchs_current_year")
 async def closed_searchs_current_year(db: Session = Depends(get_db)):
@@ -103,7 +108,7 @@ async def closed_searchs_current_year(db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-
+#----------------------------------------------------------------------
 # Cantidad de búsquedas TRABAJANDO(Abiertas (1) + Stand-by (5) + Hibernando (4))(tarjeta)
 @router_1.get("/working_searchs_current_year")
 async def working_searchs_current_year(db: Session = Depends(get_db)):
@@ -120,7 +125,8 @@ async def working_searchs_current_year(db: Session = Depends(get_db)):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
+
+#----------------------------------------------------------------------    
 # Cantidad de búsquedas abiertas del 2024
 @router_1.get("/open_searchs_current_year")
 async def open_searchs_current_year(db: Session = Depends(get_db)):
@@ -137,7 +143,8 @@ async def open_searchs_current_year(db: Session = Depends(get_db)):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
+
+#----------------------------------------------------------------------    
 # Cantidad de búsquedas stand-by del 2024
 @router_1.get("/stand_by_searchs_current_year")
 async def stand_by_searchs_current_year(db: Session = Depends(get_db)):
@@ -155,7 +162,7 @@ async def stand_by_searchs_current_year(db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-
+#----------------------------------------------------------------------
 # Cantidad de búsquedas hibernando del 2024
 @router_1.get("/hibernating_searchs_current_year")
 async def hibernating_searchs_current_year(db: Session = Depends(get_db)):
@@ -173,7 +180,7 @@ async def hibernating_searchs_current_year(db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-
+#----------------------------------------------------------------------
 # Cantidad de vacantes, en búsquedas GANADAS
 @router_1.get("/earned_search_vacancies")
 async def earned_search_vacancies(db: Session = Depends(get_db)):
@@ -190,7 +197,8 @@ async def earned_search_vacancies(db: Session = Depends(get_db)):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
+
+#----------------------------------------------------------------------    
 # Cantidad de vacantes, en búsquedas CERRADAS
 @router_1.get("/closed_search_vacancies")
 async def closed_search_vacancies(db: Session = Depends(get_db)):
@@ -207,7 +215,8 @@ async def closed_search_vacancies(db: Session = Depends(get_db)):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
+
+#----------------------------------------------------------------------    
 # Cantidad de vacantes, en búsquedas TRABAJANDO(Abiertas + Stand-By + Hibernando)
 @router_1.get("/working_search_vacancies")
 async def working_search_vacancies(db: Session = Depends(get_db)):
@@ -224,7 +233,8 @@ async def working_search_vacancies(db: Session = Depends(get_db)):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
+
+#----------------------------------------------------------------------    
 # Cantidad de vacantes, en búsquedas ABIERTAS
 @router_1.get("/open_search_vacancies")
 async def open_search_vacancies(db: Session = Depends(get_db)):
@@ -241,7 +251,8 @@ async def open_search_vacancies(db: Session = Depends(get_db)):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
+
+#----------------------------------------------------------------------    
 # Cantidad de vacantes, en búsquedas Stand-By
 @router_1.get("/stand_search_vacancies")
 async def stand_search_vacancies(db: Session = Depends(get_db)):
@@ -258,7 +269,8 @@ async def stand_search_vacancies(db: Session = Depends(get_db)):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
+
+#----------------------------------------------------------------------    
 # Cantidad de vacantes, en búsquedas HIBERNANDO
 @router_1.get("/hibernating_search_vacancies")
 async def hibernating_search_vacancies(db: Session = Depends(get_db)):
@@ -275,7 +287,8 @@ async def hibernating_search_vacancies(db: Session = Depends(get_db)):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
+
+#----------------------------------------------------------------------    
 # Cantidad de búsquedas GANADAS POR MES
 @router_1.get("/earned_searchs_per_month")
 async def earned_searchs_per_month(db: Session = Depends(get_db)):
@@ -298,9 +311,8 @@ async def earned_searchs_per_month(db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-
-# Tabla (join entre search -> client (para el nombre de cliente),
-#				search -> status_search (para el nombre del estado)
+#----------------------------------------------------------------------
+# Tabla 
 @router_1.get("/table_client_status_search")
 async def table_client_status_search(db: Session = Depends(get_db)):
     try:
