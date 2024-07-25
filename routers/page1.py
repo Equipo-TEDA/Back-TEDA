@@ -1,8 +1,8 @@
-from fastapi import APIRouter, Response, HTTPException, Depends
+from fastapi import APIRouter, Response, HTTPException, Depends, Query
 from sqlalchemy.orm import Session  
 from config.database import local_session
 from sqlalchemy import text, func
-from typing import List
+from typing import List, Optional
 
 router_1 = APIRouter(prefix="/pag1",responses={404:{"message":"No encontrado"}})
 
@@ -38,27 +38,56 @@ async def search_efficiency(db: Session = Depends(get_db)):
 
 #----------------------------------------------------------------------
 #Cantidad de busquedas totales en el año corriente
-@router_1.get("/search_current_year")
-async def search_current_year(db: Session = Depends(get_db)):
+@router_1.get("/total_search_count")
+async def cantidad_de_busquedas_totales(
+    client_name: Optional[str] = Query(None), 
+    search_name: Optional[str] = Query(None),
+    status_name: Optional[str] = Query(None),
+    db: Session = Depends(get_db)
+):
     try:
-        query = text("""
-                        SELECT COUNT(id) "cantidad_búsquedas_2024"
-                        FROM search
-                        WHERE year(date_opening) = 2024;
-                    """)
-        result = db.execute(query)
-        count = result.scalar()
+        base_query = """
+            SELECT 
+                COUNT(s.id) AS cantidad_búsquedas
+            FROM search AS s
+            INNER JOIN client AS c ON s.client_id = c.id
+            INNER JOIN status_search AS ss ON s.status_search_id = ss.id
+            WHERE year(s.date_opening) = YEAR(curdate()) 
+            AND s.id <> 22
+        """
+        
+        if client_name:
+            base_query += " AND c.name = :client_name"
+        
+        if search_name:
+            base_query += " AND s.name = :search_name"
+        
+        if status_name:
+            base_query += " AND ss.name = :status_name"
+
+        query = text(base_query)
+        params = {}
+        
+        if client_name:
+            params['client_name'] = client_name
+        
+        if search_name:
+            params['search_name'] = search_name
+        
+        if status_name:
+            params['status_name'] = status_name
+
+        result = db.execute(query, params)
+        count = result.scalar()  # Obtiene un solo valor en lugar de una fila completa
 
         return {"count": count}
-
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
 
 #----------------------------------------------------------------------    
 #Cantidad de vacantes totales en el año corriente
 @router_1.get("/vacancies_current_year")
-async def vacancies_current_year(db: Session = Depends(get_db)):
+async def cantidad_de_vacantes_totales(db: Session = Depends(get_db)):
     try:
         query = text("""
                     SELECT SUM(total_vacancies) "cantidad_vacantes_2024"
@@ -76,7 +105,7 @@ async def vacancies_current_year(db: Session = Depends(get_db)):
 #----------------------------------------------------------------------    
 #Cantidad de busquedas ganadas en el año corriente
 @router_1.get("/earned_searchs_current_year")
-async def earned_searchs_current_year(db: Session = Depends(get_db)):
+async def cantidad_busquedas_ganadas(db: Session = Depends(get_db)):
     try:
         query = text("""
                     SELECT COUNT(id) "cantidad_búsquedas_ganadas_2024"
@@ -95,7 +124,7 @@ async def earned_searchs_current_year(db: Session = Depends(get_db)):
 
 #Cantidad de busquedas cerradas en el año corriente
 @router_1.get("/closed_searchs_current_year")
-async def closed_searchs_current_year(db: Session = Depends(get_db)):
+async def cantidad_busquedas_cerradas(db: Session = Depends(get_db)):
     try:
         query = text("""
                         SELECT COUNT(id) "cantidad_búsquedas_cerradas_2024"
@@ -115,7 +144,7 @@ async def closed_searchs_current_year(db: Session = Depends(get_db)):
 
 # Cantidad de búsquedas TRABAJANDO(Abiertas (1) + Stand-by (5) + Hibernando (4))(tarjeta)
 @router_1.get("/working_searchs_current_year")
-async def working_searchs_current_year(db: Session = Depends(get_db)):
+async def cantidad_busquedas_trabajando(db: Session = Depends(get_db)):
     try:
         query = text("""
                     SELECT COUNT(id) "cantidad_búsquedas_trabajando_2024"
@@ -133,7 +162,7 @@ async def working_searchs_current_year(db: Session = Depends(get_db)):
 #----------------------------------------------------------------------    
 # Cantidad de búsquedas abiertas del 2024
 @router_1.get("/open_searchs_current_year")
-async def open_searchs_current_year(db: Session = Depends(get_db)):
+async def cantidad_busquedas_abiertas(db: Session = Depends(get_db)):
     try:
         query = text("""
                         SELECT COUNT(id) "cantidad_búsquedas_abiertas_2024"
@@ -152,7 +181,7 @@ async def open_searchs_current_year(db: Session = Depends(get_db)):
 #----------------------------------------------------------------------    
 # Cantidad de búsquedas stand-by del 2024
 @router_1.get("/stand_by_searchs_current_year")
-async def stand_by_searchs_current_year(db: Session = Depends(get_db)):
+async def cantidad_busquedas_standby(db: Session = Depends(get_db)):
     try:
         query = text("""
                         SELECT COUNT(id) "cantidad_búsquedas_standby_2024"
@@ -170,7 +199,7 @@ async def stand_by_searchs_current_year(db: Session = Depends(get_db)):
 #----------------------------------------------------------------------
 # Cantidad de búsquedas hibernando del 2024
 @router_1.get("/hibernating_searchs_current_year")
-async def hibernating_searchs_current_year(db: Session = Depends(get_db)):
+async def cantidad_busquedas_hibernando(db: Session = Depends(get_db)):
     try:
         query = text("""
                         SELECT COUNT(id) "cantidad_búsquedas_hibernando_2024"
@@ -188,7 +217,7 @@ async def hibernating_searchs_current_year(db: Session = Depends(get_db)):
 #----------------------------------------------------------------------
 # Cantidad de vacantes, en búsquedas GANADAS
 @router_1.get("/earned_search_vacancies")
-async def earned_search_vacancies(db: Session = Depends(get_db)):
+async def cantidad_de_vacantes_en_ganadas(db: Session = Depends(get_db)):
     try:
         query = text("""
                         SELECT sum(total_vacancies) "cantidad_vacantes_ganadas_2024"
@@ -207,7 +236,7 @@ async def earned_search_vacancies(db: Session = Depends(get_db)):
 #----------------------------------------------------------------------    
 # Cantidad de vacantes, en búsquedas CERRADAS
 @router_1.get("/closed_search_vacancies")
-async def closed_search_vacancies(db: Session = Depends(get_db)):
+async def cantidad_de_vacantes_en_cerradas(db: Session = Depends(get_db)):
     try:
         query = text("""
                         SELECT sum(total_vacancies) "cantidad_vacantes_cerradas_2024"
@@ -226,7 +255,7 @@ async def closed_search_vacancies(db: Session = Depends(get_db)):
 #----------------------------------------------------------------------    
 # Cantidad de vacantes, en búsquedas TRABAJANDO(Abiertas + Stand-By + Hibernando)
 @router_1.get("/working_search_vacancies")
-async def working_search_vacancies(db: Session = Depends(get_db)):
+async def cantidad_de_vacantes_en_trabajando(db: Session = Depends(get_db)):
     try:
         query = text("""
                         SELECT sum(total_vacancies) "cantidad_vacantes_trabajando_2024"
@@ -245,7 +274,7 @@ async def working_search_vacancies(db: Session = Depends(get_db)):
 #----------------------------------------------------------------------    
 # Cantidad de vacantes, en búsquedas ABIERTAS
 @router_1.get("/open_search_vacancies")
-async def open_search_vacancies(db: Session = Depends(get_db)):
+async def cantidad_de_vacantes_en_abiertas(db: Session = Depends(get_db)):
     try:
         query = text("""
                         SELECT sum(total_vacancies) "cantidad_vacantes_abiertas_2024"
@@ -264,7 +293,7 @@ async def open_search_vacancies(db: Session = Depends(get_db)):
 #----------------------------------------------------------------------    
 # Cantidad de vacantes, en búsquedas Stand-By
 @router_1.get("/stand_search_vacancies")
-async def stand_search_vacancies(db: Session = Depends(get_db)):
+async def cantidad_de_vacantes_en_standby(db: Session = Depends(get_db)):
     try:
         query = text("""
                         SELECT sum(total_vacancies) "cantidad_vacantes_stand_by_2024"
@@ -283,7 +312,7 @@ async def stand_search_vacancies(db: Session = Depends(get_db)):
 #----------------------------------------------------------------------    
 # Cantidad de vacantes, en búsquedas HIBERNANDO
 @router_1.get("/hibernating_search_vacancies")
-async def hibernating_search_vacancies(db: Session = Depends(get_db)):
+async def cantidad_de_vacantes_en_hibernando(db: Session = Depends(get_db)):
     try:
         query = text("""
                         SELECT sum(total_vacancies) "cantidad_vacantes_hibernando_2024"
@@ -302,7 +331,7 @@ async def hibernating_search_vacancies(db: Session = Depends(get_db)):
 #----------------------------------------------------------------------    
 # Cantidad de búsquedas GANADAS POR MES
 @router_1.get("/earned_searchs_per_month")
-async def earned_searchs_per_month(db: Session = Depends(get_db)):
+async def busquedas_ganadas_por_mes(db: Session = Depends(get_db)):
     try:
         query = text("""
             SELECT MONTH(date_opening) AS mes, COUNT(id) AS cantidad_búsquedas_ganadas_2024
@@ -329,7 +358,7 @@ async def earned_searchs_per_month(db: Session = Depends(get_db)):
 #----------------------------------------------------------------------
 # Tabla 
 @router_1.get("/table_client_status_search")
-async def table_client_status_search(db: Session = Depends(get_db)):
+async def tabla(db: Session = Depends(get_db)):
     try:
         query = text("""
                     SELECT 
