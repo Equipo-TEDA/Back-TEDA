@@ -1,8 +1,8 @@
-from fastapi import APIRouter, Response, HTTPException, Depends
+from fastapi import APIRouter, Response, HTTPException, Depends, Query
 from sqlalchemy.orm import Session  
 from config.database import local_session
 from sqlalchemy import text, func
-from typing import List
+from typing import List, Optional
 
 router_1 = APIRouter(prefix="/pag1",responses={404:{"message":"No encontrado"}})
 
@@ -16,7 +16,7 @@ def get_db():
 #----------------------------------------------------------------------
 #Eficacia de búsquedas
 @router_1.get("/search_efficiency")
-async def search_efficiency(db: Session = Depends(get_db)):
+async def eficacia_de_busquedas(db: Session = Depends(get_db)):
     try:
         query = text("""
                     SELECT
@@ -38,19 +38,49 @@ async def search_efficiency(db: Session = Depends(get_db)):
 
 #----------------------------------------------------------------------
 #Cantidad de busquedas totales en el año corriente
-@router_1.get("/search_current_year")
-async def search_current_year(db: Session = Depends(get_db)):
+@router_1.get("/cantidad_de_busquedas_totales")
+async def cantidad_de_busquedas_totales(
+    client_name: Optional[str] = Query(None), 
+    search_name: Optional[str] = Query(None),
+    status_name: Optional[str] = Query(None),
+    db: Session = Depends(get_db)
+):
     try:
-        query = text("""
-                        SELECT COUNT(id) "cantidad_búsquedas_2024"
-                        FROM search
-                        WHERE year(date_opening) = 2024;
-                    """)
-        result = db.execute(query)
-        count = result.scalar()
+        base_query = """
+            SELECT 
+                COUNT(s.id) AS cantidad_búsquedas
+            FROM search AS s
+            INNER JOIN client AS c ON s.client_id = c.id
+            INNER JOIN status_search AS ss ON s.status_search_id = ss.id
+            WHERE year(s.date_opening) = YEAR(curdate()) 
+            AND s.id <> 22
+        """
+        
+        if client_name:
+            base_query += " AND c.name = :client_name"
+        
+        if search_name:
+            base_query += " AND s.name = :search_name"
+        
+        if status_name:
+            base_query += " AND ss.name = :status_name"
+
+        query = text(base_query)
+        params = {}
+        
+        if client_name:
+            params['client_name'] = client_name
+        
+        if search_name:
+            params['search_name'] = search_name
+        
+        if status_name:
+            params['status_name'] = status_name
+
+        result = db.execute(query, params)
+        count = result.scalar()  # Obtiene un solo valor en lugar de una fila completa
 
         return {"count": count}
-
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
