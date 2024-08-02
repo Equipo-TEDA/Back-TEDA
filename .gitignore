@@ -5,3 +5,4 @@ entorno/
 __pycache__/
 config/__pycache__/
  routers/__pycache__/
+ prueba/
