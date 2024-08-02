@@ -2,4 +2,4 @@
 venv/
 config.json
 entorno/
-
+__pycache__/
