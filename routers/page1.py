@@ -344,13 +344,15 @@ async def busquedas_ganadas_por_mes(db: Session = Depends(get_db)):
         rows = result.fetchall()
 
         # Convertir el resultado en un formato JSON esperado
-        results = [{"mes": row['mes'], "cantidad_búsquedas_ganadas_2024": row['cantidad_búsquedas_ganadas_2024']} for row in rows]
+        results = [
+            {"mes": row[0], "cantidad_búsquedas_ganadas_2024": row[1]} 
+            for row in rows
+        ]
 
         return {"results": results}
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-    
+        raise HTTPException(status_code=500, detail=str(e)) 
 
 # Tabla (join entre search -> client (para el nombre de cliente),
 #				search -> status_search (para el nombre del estado)
