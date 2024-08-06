@@ -29,7 +29,7 @@ async def eficacia_de_busqueda(
             FROM search AS s
             INNER JOIN client AS c ON s.client_id = c.id
             INNER JOIN status_search AS ss ON s.status_search_id = ss.id
-            WHERE year(s.date_opening) = YEAR(curdate()) 
+            WHERE year(s.modification_date) = YEAR(curdate()) 
             AND s.status_search_id = 3
             AND s.id <> 22
         """
@@ -39,7 +39,7 @@ async def eficacia_de_busqueda(
             FROM search AS s
             INNER JOIN client AS c ON s.client_id = c.id
             INNER JOIN status_search AS ss ON s.status_search_id = ss.id
-            WHERE year(s.date_opening) = YEAR(curdate()) 
+            WHERE year(s.modification_date) = YEAR(curdate()) 
             AND s.status_search_id IN (2, 3)
             AND s.id <> 22
         """
@@ -101,7 +101,7 @@ async def cantidad_de_busquedas_totales(
             FROM search AS s
             INNER JOIN client AS c ON s.client_id = c.id
             INNER JOIN status_search AS ss ON s.status_search_id = ss.id
-            WHERE year(s.date_opening) = YEAR(curdate()) 
+            WHERE year(s.modification_date) = YEAR(curdate()) 
             AND s.id <> 22
         """
         
@@ -148,7 +148,7 @@ async def cantidad_vacantes_totales(
             FROM search AS s
             INNER JOIN client AS c ON s.client_id = c.id
             INNER JOIN status_search AS ss ON s.status_search_id = ss.id
-            WHERE year(s.date_opening) = YEAR(curdate()) AND s.id <> 22
+            WHERE year(s.modification_date) = YEAR(curdate()) AND s.id <> 22
         """
         
         if client_name:
@@ -194,7 +194,7 @@ async def cantidad_busquedas_ganadas(
             FROM search AS s
             INNER JOIN client AS c ON s.client_id = c.id
             INNER JOIN status_search AS ss ON s.status_search_id = ss.id
-            WHERE year(s.date_opening) = YEAR(curdate()) AND s.status_search_id = 3 AND s.id <> 22
+            WHERE year(s.modification_date) = YEAR(curdate()) AND s.status_search_id = 3 AND s.id <> 22
         """
         
         if client_name:
@@ -241,7 +241,7 @@ async def cantidad_busquedas_cerradas(
             FROM search AS s
             INNER JOIN client AS c ON s.client_id = c.id
             INNER JOIN status_search AS ss ON s.status_search_id = ss.id
-            WHERE year(s.date_opening) = YEAR(curdate()) AND s.status_search_id = 2 AND s.id <> 22
+            WHERE year(s.modification_date) = YEAR(curdate()) AND s.status_search_id = 2 AND s.id <> 22
         """
         
         if client_name:
@@ -289,7 +289,7 @@ async def cantidad_busquedas_trabajando(
             FROM search AS s
             INNER JOIN client AS c ON s.client_id = c.id
             INNER JOIN status_search AS ss ON s.status_search_id = ss.id
-            WHERE year(s.date_opening) = YEAR(curdate()) AND s.status_search_id IN (1, 5, 4) AND s.id <> 22
+            WHERE year(s.modification_date) = YEAR(curdate()) AND s.status_search_id IN (1, 5, 4) AND s.id <> 22
         """
         
         if client_name:
@@ -335,7 +335,7 @@ async def cantidad_busquedas_abiertas(
             FROM search AS s
             INNER JOIN client AS c ON s.client_id = c.id
             INNER JOIN status_search AS ss ON s.status_search_id = ss.id
-            WHERE year(s.date_opening) = YEAR(curdate()) AND s.status_search_id = 1 AND s.id <> 22
+            WHERE year(s.modification_date) = YEAR(curdate()) AND s.status_search_id = 1 AND s.id <> 22
         """
         
         if client_name:
@@ -382,7 +382,7 @@ async def cantidad_busquedas_standby(
             FROM search AS s
             INNER JOIN client AS c ON s.client_id = c.id
             INNER JOIN status_search AS ss ON s.status_search_id = ss.id
-            WHERE year(s.date_opening) = YEAR(curdate()) AND s.status_search_id = 5 AND s.id <> 22
+            WHERE year(s.modification_date) = YEAR(curdate()) AND s.status_search_id = 5 AND s.id <> 22
         """
         
         if client_name:
@@ -428,7 +428,7 @@ async def cantidad_busquedas_hibernando(
             FROM search AS s
             INNER JOIN client AS c ON s.client_id = c.id
             INNER JOIN status_search AS ss ON s.status_search_id = ss.id
-            WHERE year(s.date_opening) = YEAR(curdate()) AND s.status_search_id = 4 AND s.id <> 22
+            WHERE year(s.modification_date) = YEAR(curdate()) AND s.status_search_id = 4 AND s.id <> 22
         """
         
         if client_name:
@@ -474,7 +474,7 @@ async def cantidad_vacantes_en_busq_ganadas(
             FROM search AS s
             INNER JOIN client AS c ON s.client_id = c.id
             INNER JOIN status_search AS ss ON s.status_search_id = ss.id
-            WHERE year(s.date_opening) = YEAR(curdate()) AND s.status_search_id = 3 AND s.id <> 22
+            WHERE year(s.modification_date) = YEAR(curdate()) AND s.status_search_id = 3 AND s.id <> 22
         """
         
         if client_name:
@@ -521,7 +521,7 @@ async def cantidad_vacantes_en_busq_cerradas(
             FROM search AS s
             INNER JOIN client AS c ON s.client_id = c.id
             INNER JOIN status_search AS ss ON s.status_search_id = ss.id
-            WHERE year(s.date_opening) = YEAR(curdate()) AND s.status_search_id = 2 AND s.id <> 22
+            WHERE year(s.modification_date) = YEAR(curdate()) AND s.status_search_id = 2 AND s.id <> 22
         """
         
         if client_name:
@@ -568,7 +568,7 @@ async def cantidad_vacantes_en_busq_trabajando(
             FROM search AS s
             INNER JOIN client AS c ON s.client_id = c.id
             INNER JOIN status_search AS ss ON s.status_search_id = ss.id
-            WHERE year(s.date_opening) = YEAR(curdate()) AND s.status_search_id IN (1, 5, 4) AND s.id <> 22
+            WHERE year(s.modification_date) = YEAR(curdate()) AND s.status_search_id IN (1, 5, 4) AND s.id <> 22
         """
         
         if client_name:
@@ -615,7 +615,7 @@ async def cantidad_vacantes_en_busq_abiertas(
             FROM search AS s
             INNER JOIN client AS c ON s.client_id = c.id
             INNER JOIN status_search AS ss ON s.status_search_id = ss.id
-            WHERE year(s.date_opening) = YEAR(curdate()) AND s.status_search_id = 1 AND s.id <> 22
+            WHERE year(s.modification_date) = YEAR(curdate()) AND s.status_search_id = 1 AND s.id <> 22
         """
         
         if client_name:
@@ -662,7 +662,7 @@ async def cantidad_vacantes_en_busq_standby(
             FROM search AS s
             INNER JOIN client AS c ON s.client_id = c.id
             INNER JOIN status_search AS ss ON s.status_search_id = ss.id
-            WHERE year(s.date_opening) = YEAR(curdate()) AND s.status_search_id = 5 AND s.id <> 22
+            WHERE year(s.modification_date) = YEAR(curdate()) AND s.status_search_id = 5 AND s.id <> 22
         """
         
         if client_name:
@@ -709,7 +709,7 @@ async def cantidad_vacantes_en_busq_hibernando(
             FROM search AS s
             INNER JOIN client AS c ON s.client_id = c.id
             INNER JOIN status_search AS ss ON s.status_search_id = ss.id
-            WHERE year(s.date_opening) = YEAR(curdate()) AND s.status_search_id = 4 AND s.id <> 22
+            WHERE year(s.modification_date) = YEAR(curdate()) AND s.status_search_id = 4 AND s.id <> 22
         """
         
         if client_name:
@@ -752,11 +752,11 @@ async def cantidad_busquedas_ganadas_por_mes(
 ):
     try:
         query_str = """
-            SELECT MONTH(s.date_opening) AS mes, COUNT(s.id) AS cantidad_búsquedas_ganadas
+            SELECT MONTH(s.modification_date) AS mes, COUNT(s.id) AS cantidad_búsquedas_ganadas
             FROM search s
             JOIN client c ON s.client_id = c.id
             JOIN status_search ss ON s.status_search_id = ss.id
-            WHERE YEAR(s.date_opening) = YEAR(curdate()) AND s.status_search_id = 3
+            WHERE YEAR(s.modification_date) = YEAR(curdate()) AND s.status_search_id = 3
         """
         
         conditions = []
@@ -806,7 +806,7 @@ async def tabla(
     search_name: Optional[str] = Query(None),
     status_name: Optional[str] = Query(None),
     page: int = Query(1, ge=1), #-> con esto lo que hacemos es controlar la página actual que se visualiza; ge=1 define que el valor mínimo es 1
-    page_size: int = Query(5, ge=1), #-> con esto lo que hacemos es controlar la cantidad de registros que se 
+    page_size: int = Query(10, ge=1), #-> con esto lo que hacemos es controlar la cantidad de registros que se 
                                      # visualizan por defecto en la página actual; ge=1 define que el valor mínimo es 1 
     db: Session = Depends(get_db)
 ):
@@ -823,11 +823,11 @@ async def tabla(
                 ss.name AS estado, 
                 s.date_opening AS fecha_apertura,
                 s.total_vacancies AS vacantes, 
-                datediff(now(), s.date_opening) AS dias_en_etapa
+                datediff(now(), s.modification_date) AS dias_en_etapa
             FROM search AS s
             INNER JOIN client AS c ON s.client_id = c.id
             INNER JOIN status_search AS ss ON s.status_search_id = ss.id
-            WHERE YEAR(s.date_opening) = YEAR(curdate())
+            WHERE YEAR(s.modification_date) = YEAR(curdate()) AND s.id <> 22
         """
         
         count_query = """
@@ -835,7 +835,7 @@ async def tabla(
             FROM search AS s
             INNER JOIN client AS c ON s.client_id = c.id
             INNER JOIN status_search AS ss ON s.status_search_id = ss.id
-            WHERE YEAR(s.date_opening) = YEAR(curdate())
+            WHERE YEAR(s.modification_date) = YEAR(curdate()) AND s.id <> 22
         """
         
         if client_name:
