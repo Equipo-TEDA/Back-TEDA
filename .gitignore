@@ -1,8 +1,0 @@
-# Ignorar archivos de configuración locales
-venv/
-config.json
-entorno/
-__pycache__/
-config/__pycache__/
- routers/__pycache__/
- prueba/
